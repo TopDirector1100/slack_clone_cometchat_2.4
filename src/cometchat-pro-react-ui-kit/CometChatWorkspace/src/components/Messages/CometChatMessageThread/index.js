@@ -537,7 +537,8 @@ class CometChatMessageThread extends React.PureComponent {
 									{this.props.threadItem.name}
 								</span>
 							</div>
-							<div css={headerCloseStyle(clearIcon, this.context)} className="header__close" onClick={() => this.props.actionGenerated(enums.ACTIONS["CLOSE_THREADED_MESSAGE"])}></div>
+							<div css={headerCloseStyle(clearIcon, this.context)} className="header__close" 
+							onClick={() => this.props.actionGenerated(enums.ACTIONS["CLOSE_THREADED_MESSAGE"])}></div>
 						</div>
 					</div>
 					<div css={messageContainerStyle()} className="chat__message__container">

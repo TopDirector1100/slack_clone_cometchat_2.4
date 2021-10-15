@@ -166,15 +166,21 @@ class CometChatNavBar extends React.Component {
 			switch (tab) {
 				case "SIDEBAR_CHATS":
 					return (
-						<div key={tab} css={itemStyle(this.props)} className="navbar__item" onClick={() => this.tabChanged("SIDEBAR_CHATS")}>
-							<div css={itemLinkStyle(chatGreyIcon, chatsTabActive, this.context)} className="item__link item__link__chats" title={Translator.translate("CHATS", this.context.language)}></div>
+						<div key={tab} css={itemStyle(this.props)} 
+							className="navbar__item" 
+							onClick={() => this.tabChanged("SIDEBAR_CHATS")}>
+							<div 
+								css={itemLinkStyle(chatGreyIcon, chatsTabActive, this.context)} className="item__link item__link__chats" title={Translator.translate("CHATS", this.context.language)}></div>
 							<div css={itemLinkTextStyle(chatsTabActive, this.context)} className="item__label">{Translator.translate("CHATS", this.context.language)}</div>
 						</div>
 					);
 				case "SIDEBAR_USERS":
 					return (
-						<div key={tab} css={itemStyle(this.props)} className="navbar__item" onClick={() => this.tabChanged("SIDEBAR_USERS")}>
-							<div css={itemLinkStyle(contactGreyIcon, userTabActive, this.context)} className="item__link item__link__contacts" title={Translator.translate("USERS", this.context.language)}></div>
+						<div key={tab} css={itemStyle(this.props)} 
+							className="navbar__item" 
+							onClick={() => this.tabChanged("SIDEBAR_USERS")}>
+							<div 
+								css={itemLinkStyle(contactGreyIcon, userTabActive, this.context)} className="item__link item__link__contacts" title={Translator.translate("USERS", this.context.language)}></div>
 							<div css={itemLinkTextStyle(userTabActive, this.context)} className="item__label">{Translator.translate("USERS", this.context.language)}</div>
 						</div>
 					);

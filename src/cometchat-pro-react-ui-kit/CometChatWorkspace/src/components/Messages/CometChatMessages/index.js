@@ -11,7 +11,8 @@ import {
 	CometChatMessageComposer, 
 	CometChatLiveReactions, 
 	CometChatMessageThread, 
-	CometChatImageViewer
+	CometChatImageViewer,
+	GetThreadMessages
 } from "../";
 
 import {
@@ -48,6 +49,7 @@ import {
 
 class CometChatMessages extends React.PureComponent {
 	static contextType = CometChatContext;
+	showThreadView = false;
 
 	constructor(props) {
 
@@ -76,6 +78,11 @@ class CometChatMessages extends React.PureComponent {
 			enableSendingOneOnOneMessage: false,
 			enableSendingGroupMessage: false,
 			enableHideDeletedMessages: false,
+
+			moreThreadsView: false,
+			moreUnreadView: false,
+			moreDmsView: false,
+			moreReactions: false
 		};
 
 		this.contextProviderRef = React.createRef();
@@ -99,9 +106,31 @@ class CometChatMessages extends React.PureComponent {
 		this.enableSendingOneOnOneMessage();
 		this.enableSendingGroupMessage();
 		this.enableHideDeletedMessages();
+
+		this.setState({
+			moreDmsView: this.props.flagShowDMs,
+			moreReactions: this.props.flagShowReactions,
+			moreThreadsView: this.props.flagShowThreads,
+			moreUnreadView: this.props.flagShowUnreads
+		})
+
+		this.showThreadView = this.props.flagShowThreads
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+
+		// if(this.props.flagShowDMs !== undefined && (this.prevProps.flagShowDMs != this.props.flagShowDMs
+		// 	|| this.prevProps.flagShowReactions != this.props.flagShowReactions
+		// 	|| this.prevProps.flagShowThreads != this.props.flagShowThreads
+		// 	|| this.prevProps.flagShowUnreads != this.props.flagShowUnreads)) {
+		// 		console.log('wondering here', this.props)
+		// 	this.setState({
+		// 		moreDmsView: this.props.flagShowDMs,
+		// 		moreReactions: this.props.flagShowReactions,
+		// 		moreThreadsView: this.props.flagShowThreads,
+		// 		moreUnreadView: this.props.flagShowUnreads
+		// 	})
+		// }
 		
 		if (Object.keys(this.item).length) {
 			const ifChatWindowChanged = () => {
@@ -549,7 +578,7 @@ class CometChatMessages extends React.PureComponent {
 
 	viewThreadedMessage = parentMessage => {
 		const message = { ...parentMessage };
-		console.log('context = ', this.getContext().item, parentMessage);
+		console.log('viewthreadedmsg = ', this.getContext().item, parentMessage);
 		const threaditem = { ...this.getContext().item };
 		this.setState({
 			threadmessageview: true,
@@ -573,7 +602,11 @@ class CometChatMessages extends React.PureComponent {
 	};
 
 	closeThreadedMessage = () => {
-		this.setState({ threadmessageview: false, viewdetailscreen: false });
+		this.showThreadView = !this.showThreadView
+		this.setState({ 
+			threadmessageview: false, 
+			viewdetailscreen: false
+		});
 	};
 
 	/*
@@ -732,7 +765,6 @@ class CometChatMessages extends React.PureComponent {
 
 	messageRefreshed = messages => {
 		const messageList = [...messages];
-		console.log('++++++++++++++++++++++++', messageList);
 		this.setState({ messageList: messageList, scrollToBottom: true });
 	};
 
@@ -937,7 +969,8 @@ class CometChatMessages extends React.PureComponent {
 				<div css={messagePaneTopStyle()} className="message_pane__top">
 					<div css={messagePaneBannerStyle(this.props)} className="message_pane__banner">
 						<div css={messagePaneUnreadBannerStyle()} className="message_pane__unread_banner__banner" title={Translator.translate("JUMP", this.props.lang)}>
-							<button type="button" css={messagePaneUnreadBannerMessageStyle(this.props)} className="message_pane__unread_banner__msg" onClick={this.jumpToMessages}>
+							<button type="button" css={messagePaneUnreadBannerMessageStyle(this.props)} className="message_pane__unread_banner__msg"
+							 onClick={this.jumpToMessages}>
 								<span css={iconArrowDownStyle()} className="icon--arrow-down">
 									&#x2193;{" "}
 								</span>
@@ -1001,7 +1034,8 @@ class CometChatMessages extends React.PureComponent {
 		let threadMessageView = null;
 		if (this.state.threadmessageview) {
 			threadMessageView = (
-				<div css={chatSecondaryStyle(this.props)} className="chat__secondary-view">
+				<div css={chatSecondaryStyle(this.props)} 
+					className="chat__secondary-view">
 					<CometChatMessageThread 
 						activeTab={this.state.activeTab} 
 						threadItem={this.state.threadmessageitem} 
@@ -1018,6 +1052,26 @@ class CometChatMessages extends React.PureComponent {
 		if (this.state.viewOriginalImage) {
 			originalImageView = <CometChatImageViewer close={() => this.toggleOriginalImageView(false)} message={this.state.viewOriginalImage} />;
 		}
+
+		// more actions -- threads
+		console.log('this.props = ', this.props);
+		let threadsView = null;
+		if (this.showThreadView) {
+			threadsView = (
+				<div css={chatSecondaryStyle(this.props)} className="chat__secondary-view">
+					<GetThreadMessages 
+						activeTab={this.state.activeTab} 
+						threadItem={this.state.threadmessageitem} 
+						threadType={this.state.threadmessagetype} 
+						parentMessage={this.state.threadmessageparent} 
+						loggedInUser={this.loggedInUser} 
+						actionGenerated={this.actionHandler} 
+						messages={this.state.messageList}
+					/>
+				</div>
+			);
+		}
+
 
 		let messageComponent = (
 			<React.Fragment>
@@ -1044,6 +1098,7 @@ class CometChatMessages extends React.PureComponent {
 				{outgoingCallView}
 				{incomingDirectCallView}
 				{outgoingDirectCallView}
+				{threadsView}
 			</React.Fragment>
 		);
 

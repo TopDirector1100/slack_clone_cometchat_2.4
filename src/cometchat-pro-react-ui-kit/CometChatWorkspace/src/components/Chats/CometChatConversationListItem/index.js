@@ -433,7 +433,10 @@ class CometChatConversationListItem extends React.PureComponent {
 		}
 
 		return (
-			<div css={listItem(this.props)} className="list__item" onMouseEnter={() => this.handleMouseHover(true)} onMouseLeave={() => this.handleMouseHover(false)} onClick={this.itemClick}>
+			<div css={listItem(this.props)} className="list__item" 
+			onMouseEnter={() => this.handleMouseHover(true)}
+			 onMouseLeave={() => this.handleMouseHover(false)} 
+			 onClick={this.itemClick}>
 				<div css={this.props.conversation.conversationType == "user" ? itemThumbnailStyle() : itemChannelStyle()} 
 					className="list__item__thumbnail">
 					{this.props.conversation.conversationType == "user" ? avatar : "#"}
@@ -444,11 +447,11 @@ class CometChatConversationListItem extends React.PureComponent {
 						<div css={itemNameStyle()} className="item__details__name" onMouseEnter={event => this.toggleTooltip(event, true)} onMouseLeave={event => this.toggleTooltip(event, false)}>
 							{this.props.conversation.conversationWith.name}
 						</div>
-						{/* {lastMessageTimeStamp} */}
+						{lastMessageTimeStamp}
 					</div>
 					<div css={itemRowStyle()} className="item__details_block_two">
 						<div css={itemLastMsgStyle(this.props)} className="item__details__last-message" onMouseEnter={event => this.toggleTooltip(event, true)} onMouseLeave={event => this.toggleTooltip(event, false)}>
-							{/* {this.state.lastMessage} */}
+							{this.state.lastMessage}
 						</div>
 						{unreadCount}
 					</div>

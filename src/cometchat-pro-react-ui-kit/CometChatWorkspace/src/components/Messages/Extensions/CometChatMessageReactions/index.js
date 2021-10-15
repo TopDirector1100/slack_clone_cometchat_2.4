@@ -64,7 +64,9 @@ class CometChatMessageReactions extends React.Component {
 			emoji: emoji.colons,
 		}).then(response => {
 			// Reaction failed
-			if (response.hasOwnProperty("success") === false || (response.hasOwnProperty("success") && response["success"] === false)) {
+			if (response.hasOwnProperty("success") === false 
+			|| (response.hasOwnProperty("success") 
+			&& response["success"] === false)) {
 				this.props.actionGenerated(enums.ACTIONS["ERROR"], [], "SOMETHING_WRONG");
 			}
 		})

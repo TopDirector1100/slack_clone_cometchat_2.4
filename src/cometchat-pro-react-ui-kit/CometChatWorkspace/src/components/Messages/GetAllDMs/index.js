@@ -12,34 +12,24 @@ import Translator from "../../../resources/localization/translator";
 import { theme } from "../../../resources/theme";
 
 import { 
-	chatWrapperStyle,
-	threadUserDetail,
 	threadAvatar,
-	extHeader,
 	threadContainer,
-	threadBox,
 	threadSender,
 	threadReceiver,
-	detailName 
+	detailName,
+	wrapperStyle,
+	headerStyle,
+	headerWrapperStyle,
+	headerDetailStyle,
+	headerTitleStyle,
+	headerCloseStyle,
+	messageContainerStyle
 } from "./style";
 
-import {
-	CometChatMessageHeader, 
-	// CometChatMessageList, 
-	// CometChatMessageComposer, 
-	// CometChatLiveReactions, 
-	// CometChatMessageThread, 
-	// CometChatImageViewer
-} from "../";
-import { connect } from 'react-redux';
+import clearIcon from "../CometChatMessageThread/resources/close.svg";
+import * as enums from "../../../util/enums.js";
 
-// import blueDoubleTick from "./resources/message-read.svg";
-// import greyDoubleTick from "./resources/message-delivered.svg";
-// import greyTick from "./resources/message-sent.svg";
-// import sendingTick from "./resources/wait.svg";
-// import errorTick from "./resources/warning-small.svg";
-
-class GetThreadMessages extends React.PureComponent {
+class GetAllDMs extends React.PureComponent {
 	static contextType = CometChatContext;
 	loggedInUser;
 
@@ -53,6 +43,8 @@ class GetThreadMessages extends React.PureComponent {
 	}
 
 	componentDidMount() {
+		console.log('get thread props = ', this.props);
+
 		CometChat.getLoggedinUser()
 		.then(user => {	
 				this.loggedInUser = user;
@@ -89,7 +81,7 @@ class GetThreadMessages extends React.PureComponent {
 			});
 		}
 		else {
-			let UID = this.loggedInUser.uid;
+			let  b = this.loggedInUser.uid;
 			let limit = 30;
 			let list = [];
 			let messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -124,18 +116,28 @@ class GetThreadMessages extends React.PureComponent {
 		console.log('theard = ', this.state.threadMessages);
 
 		return (
-				<div css={chatWrapperStyle(this.props, this.state)} className="main__chat">
-					<CometChatMessageHeader 
-						lang={this.props.lang} 
-						sidebar={this.props.sidebar} 
-						viewdetail={this.props.viewdetail === false ? false : true} 
-						actionGenerated={this.actionHandler} 
-					/>
+			<React.Fragment>
+				<div css={wrapperStyle(this.context)} className="thread__chat">
+					<div css={headerStyle(this.context)} className="chat__header">
+						<div css={headerWrapperStyle()} className="header__wrapper">
+							<div css={headerDetailStyle()} className="header__details">
+								<h6 css={headerTitleStyle()} className="header__title">
+									{Translator.translate("THREADS", this.context.language)}
+								</h6>
+							</div>
+							{/* <div 
+								css={headerCloseStyle(clearIcon, this.context)} 
+								className="header__close" 
+								onClick={() => this.props.actionGenerated(enums.ACTIONS["CLOSE_THREADED_MESSAGE"])}>
+							</div> */}
+						</div>
+					</div>
+					<div css={messageContainerStyle()} className="chat__message__container">
 					{
 						this.state.threadMessages.length > 0 ?
 							this.state.threadMessages.map((item, index) =>{
 								return(
-									<div css={threadContainer()} key={index}>
+									<div css={threadContainer(this.props, this.state)} key={index}>
 										<div className="threadBox">
 											<div className="reciever" css={threadReceiver()} >
 												<img 
@@ -158,9 +160,13 @@ class GetThreadMessages extends React.PureComponent {
 									</div>
 								)
 							})
-						: <div>Loading...</div>
+						: <div> There is no result </div>
 					}
+
+					</div>
 				</div>
+			</React.Fragment>
+					
 		);
 	}
 }
@@ -174,4 +180,4 @@ GetThreadMessages.propTypes = {
 	theme: PropTypes.object,
 };
 
-export { GetThreadMessages };
+export { GetAllDMs };

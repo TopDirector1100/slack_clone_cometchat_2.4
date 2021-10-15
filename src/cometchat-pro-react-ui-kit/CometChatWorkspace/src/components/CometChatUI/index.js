@@ -55,6 +55,7 @@ class CometChatUI extends React.Component {
 		
 		switch(action) {
 			case enums.ACTIONS["ITEM_CLICKED"]:
+				console.log("user type = ", item, type);
 				this.itemClicked(item, type);
 			break;
 			case enums.ACTIONS["TOGGLE_SIDEBAR"]:
@@ -100,6 +101,22 @@ class CometChatUI extends React.Component {
 	threadView = () => {
 		this.setDefault();
 		this.setState({showThreads: true})
+		// this.itemClicked("user", "Clicked");
+	}
+
+	reactoinView = () => {
+		this.setDefault();
+		this.setState({showReactions: true})
+	}
+
+	dmsView = () => {
+		this.setDefault();
+		this.setState({showAllDms: true})
+	}
+
+	unreadView = () => {
+		this.setDefault();
+		this.setState({showUnReads: true})
 	}
 
 	chatListView = () => {
@@ -150,24 +167,26 @@ class CometChatUI extends React.Component {
 
 	render() {
 
-		let messageScreen = (
-			<CometChatMessages 
-				theme={this.props.theme}
-				lang={this.props.lang}
-				_parent="unified"
-				actionGenerated={this.actionHandler} />
-		);
-
 		let threadMessages = (
 			<GetThreadMessages 
 				theme={this.props.theme}
 				lang={this.props.lang}
 				_parent="unified"
-				actionGenerated={this.actionHandler} 
-				userId={this.props.userId}
 			/>
 		);
 
+		let messageScreen = (
+			<CometChatMessages 
+				theme={this.props.theme}
+				lang={this.props.lang}
+				_parent="unified"
+				actionGenerated={this.actionHandler} 
+				flagShowThreads={this.state.showThreads}
+				flagShowReactions={this.state.showReactions}
+				flagShowUnreads={this.state.showUnReads}
+				flagShowDMs={this.state.showAllDms}
+			/>
+		);
 		return (
 			<React.Fragment>
 				<CometChatContextProvider ref={el => this.contextProviderRef = el}
@@ -184,12 +203,15 @@ class CometChatUI extends React.Component {
 								actionGenerated={this.navBarAction} 
 								actionThread={this.threadView}
 								actionMessage={this.chatListView}
-
+								actionReaction={this.reactoinView}
+								actionDms={this.dmsView}
+								actionUnRead={this.unreadView}
 							/>
 						</div>
 						<div css={unifiedMainStyle(this.state, this.props)} className="unified__main">
-							{}
-							{this.state.showThreads ? threadMessages : messageScreen}
+							{
+								this.state.showThreads ? threadMessages : messageScreen
+							}
 						</div>
 						<CometChatIncomingCall theme={this.props.theme} lang={this.props.lang} actionGenerated={this.actionHandler} />
 						<CometChatIncomingDirectCall theme={this.props.theme} lang={this.props.lang} actionGenerated={this.actionHandler} />
