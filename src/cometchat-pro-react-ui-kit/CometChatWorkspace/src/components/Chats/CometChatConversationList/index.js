@@ -865,10 +865,6 @@ class CometChatConversationList extends React.Component {
 
 	}
 
-	allDM = falg => {
-
-	}
-
 	render() {
 		// group list
 		const conversationList = this.state.conversationlist.map((conversation, key) => {
@@ -998,7 +994,8 @@ class CometChatConversationList extends React.Component {
 				{/* Unread messages */}
 				{
 					this.state.showAllUnRead ? 
-						<div css={chatsHeaderStyle(theme)} className="chats__header" onClick={this.getAllUnRead}>
+						<div css={chatsHeaderStyle(theme)} className="chats__header" 
+							onClick={this.props.unreadShow}>
 							<Notes css={materialIcons_opt()} className="materialIcons" />All unread
 						</div> 
 					: ''
@@ -1007,7 +1004,8 @@ class CometChatConversationList extends React.Component {
 				{/* all direct messages */}
 				{
 					this.state.showAllDms ? 
-						<div css={chatsHeaderStyle(theme)} className="chats__header" onClick={this.getAllDms}>
+						<div css={chatsHeaderStyle(theme)} className="chats__header" 
+							onClick={this.props.dmsshow}>
 							<Forum css={materialIcons_opt()} className="materialIcons" />All DMs
 						</div> 
 					: ''

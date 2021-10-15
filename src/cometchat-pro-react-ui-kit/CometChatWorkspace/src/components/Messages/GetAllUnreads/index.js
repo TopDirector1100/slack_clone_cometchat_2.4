@@ -26,10 +26,7 @@ import {
 	messageContainerStyle
 } from "./style";
 
-import clearIcon from "../CometChatMessageThread/resources/close.svg";
-import * as enums from "../../../util/enums.js";
-
-class GetAllDMs extends React.PureComponent {
+class GetAllUnreads extends React.PureComponent {
 	static contextType = CometChatContext;
 	loggedInUser;
 
@@ -38,7 +35,7 @@ class GetAllDMs extends React.PureComponent {
 		this.state = {
 			receipts: false,
 			messageList: [],
-			directMessages: []
+			unreadMessages: []
 		};
 	}
 
@@ -106,12 +103,12 @@ class GetAllDMs extends React.PureComponent {
 				})
 			}
 
-			this.setState({directMessages: tempTheards})
+			this.setState({unreadMessages: tempTheards})
 		}
 	}
 
 	render() {
-		console.log('dms = ', this.state.directMessages);
+		console.log('all unreads = ', this.state.unreadMessages);
 
 		return (
 			<React.Fragment>
@@ -120,15 +117,15 @@ class GetAllDMs extends React.PureComponent {
 						<div css={headerWrapperStyle()} className="header__wrapper">
 							<div css={headerDetailStyle()} className="header__details">
 								<h6 css={headerTitleStyle()} className="header__title">
-									{Translator.translate("Direct Messages", this.context.language)}
+									{Translator.translate("All unreads", this.context.language)}
 								</h6>
 							</div>
 						</div>
 					</div>
 					<div css={messageContainerStyle()} className="chat__message__container">
 					{
-						this.state.directMessages.length > 0 ?
-							this.state.directMessages.map((item, index) =>{
+						this.state.unreadMessages.length > 0 ?
+							this.state.unreadMessages.map((item, index) =>{
 								return(
 									<div css={threadContainer(this.props, this.state)} key={index}>
 										<div className="threadBox">
@@ -158,12 +155,12 @@ class GetAllDMs extends React.PureComponent {
 }
 
 // Specifies the default values for props:
-GetAllDMs.defaultProps = {
+GetAllUnreads.defaultProps = {
 	theme: theme,
 };
 
-GetAllDMs.propTypes = {
+GetAllUnreads.propTypes = {
 	theme: PropTypes.object,
 };
 
-export { GetAllDMs };
+export { GetAllUnreads };

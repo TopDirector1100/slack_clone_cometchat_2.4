@@ -43,4 +43,6 @@ export { CometChatSenderVideoMessageBubble } from "./CometChatSenderVideoMessage
 
 export { CometChatThreadedMessageReplyCount } from "./CometChatThreadedMessageReplyCount";
 export { GetThreadMessages } from "./GetThreadMessages";
+export { GetAllDMs } from "./GetAllDMs";
+export { GetAllUnreads } from "./GetAllUnreads";
 

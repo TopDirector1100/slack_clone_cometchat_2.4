@@ -142,6 +142,8 @@ class CometChatNavBar extends React.Component {
 					actionGenerated={this.props.actionGenerated} 
 					onItemClick={(item, type) => this.props.actionGenerated(enums.ACTIONS["ITEM_CLICKED"], type, item)} 
 					threadMsgShow={this.props.actionThread}
+					dmsshow={this.props.actionDms}
+					unreadShow={this.props.actionUnRead}
 					messageListShow={this.props.actionMessage}
 				/>;
 			case "SIDEBAR_GROUPS":

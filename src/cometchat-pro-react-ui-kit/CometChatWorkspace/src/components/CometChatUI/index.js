@@ -8,8 +8,9 @@ import { CometChat } from "@cometchat-pro/chat";
 import CometChatNavBar  from "./CometChatNavBar";
 import { 
 	CometChatMessages, 
-	CometChatMessageThread,
-	GetThreadMessages
+	GetThreadMessages,
+	GetAllDMs,
+	GetAllUnreads
 	} from "../Messages";
 import { CometChatIncomingCall, CometChatIncomingDirectCall } from "../Calls";
 
@@ -37,7 +38,8 @@ class CometChatUI extends React.Component {
 			showReactions: false,
 			showUnReads: false,
 			showAllDms: false,
-			showSavedItems: false
+			showSavedItems: false,
+			currentPageName: ""
 		}
 
 		this.navBarRef = React.createRef();
@@ -100,28 +102,27 @@ class CometChatUI extends React.Component {
 
 	threadView = () => {
 		this.setDefault();
-		this.setState({showThreads: true})
-		// this.itemClicked("user", "Clicked");
+		this.setState({showThreads: true, currentPageName:"threads"})
 	}
 
 	reactoinView = () => {
 		this.setDefault();
-		this.setState({showReactions: true})
+		this.setState({showReactions: true, currentPageName:"reactions"})
 	}
 
 	dmsView = () => {
 		this.setDefault();
-		this.setState({showAllDms: true})
+		this.setState({showAllDms: true, currentPageName:"Dms"})
 	}
 
 	unreadView = () => {
 		this.setDefault();
-		this.setState({showUnReads: true})
+		this.setState({showUnReads: true, currentPageName:"unread"})
 	}
 
 	chatListView = () => {
 		this.setDefault();
-		this.setState({showChatView: true})
+		this.setState({showChatView: true, currentPageName:"chat"})
 	}
 
 	toggleSideBar = () => {
@@ -165,28 +166,46 @@ class CometChatUI extends React.Component {
 		}
 	}
 
+	renderSwitch() {
+		console.log(this.state.currentPageName)
+		switch(this.state.currentPageName) {
+		  	case 'threads':
+				return  <GetThreadMessages 
+					theme={this.props.theme}
+					lang={this.props.lang}
+					_parent="unified"
+				/>;
+			case 'reactions':
+				return 'bar';
+			case 'Dms':
+				return 	<GetAllDMs 
+					theme={this.props.theme}
+					lang={this.props.lang}
+					_parent="unified"
+				/>;
+			case 'unread':
+				return <GetAllUnreads 
+					theme={this.props.theme}
+					lang={this.props.lang}
+					_parent="unified"
+					actionGenerated={this.actionHandler}
+				/>;
+			case 'allSaved':
+				return ;
+			case 'chat':
+				return  <CometChatMessages 
+					theme={this.props.theme}
+					lang={this.props.lang}
+					_parent="unified"
+					actionGenerated={this.actionHandler} 
+				/>;
+		  default:
+			return 'foo';
+		}
+	}
+
 	render() {
-
-		let threadMessages = (
-			<GetThreadMessages 
-				theme={this.props.theme}
-				lang={this.props.lang}
-				_parent="unified"
-			/>
-		);
-
-		let messageScreen = (
-			<CometChatMessages 
-				theme={this.props.theme}
-				lang={this.props.lang}
-				_parent="unified"
-				actionGenerated={this.actionHandler} 
-				flagShowThreads={this.state.showThreads}
-				flagShowReactions={this.state.showReactions}
-				flagShowUnreads={this.state.showUnReads}
-				flagShowDMs={this.state.showAllDms}
-			/>
-		);
+		
 		return (
 			<React.Fragment>
 				<CometChatContextProvider ref={el => this.contextProviderRef = el}
@@ -210,7 +229,7 @@ class CometChatUI extends React.Component {
 						</div>
 						<div css={unifiedMainStyle(this.state, this.props)} className="unified__main">
 							{
-								this.state.showThreads ? threadMessages : messageScreen
+								this.renderSwitch()
 							}
 						</div>
 						<CometChatIncomingCall theme={this.props.theme} lang={this.props.lang} actionGenerated={this.actionHandler} />
