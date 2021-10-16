@@ -24,7 +24,8 @@ export const listItem = (props) => {
         ...selectedState,
         fontSize: "18px",
         fontWeight: "500",
-        verticalAlign: "middle"
+        verticalAlign: "middle",
+        margin: "5px 0"
     }
 }
 

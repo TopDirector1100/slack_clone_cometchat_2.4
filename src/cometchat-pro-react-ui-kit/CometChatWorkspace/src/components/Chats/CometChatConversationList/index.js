@@ -691,7 +691,9 @@ class CometChatConversationList extends React.Component {
 	handleClick = conversation => {
 		if (!this.props.onItemClick) return;
 
-		this.props.onItemClick(conversation.conversationWith, conversation.conversationType);
+		this.props.onItemClick(
+			conversation.conversationWith, 
+			conversation.conversationType);
 		this.selectedConversation = conversation;
 	};
 
@@ -897,7 +899,7 @@ class CometChatConversationList extends React.Component {
 				// if (this.getContext().type === CometChat.ACTION_TYPE.TYPE_USER && this.getContext().item.uid === conversation.conversationWith.uid) {
 				// 	this.selectedConversation = conversation;
 				// } else 
-				if (this.getContext().type === CometChat.ACTION_TYPE.TYPE_USER ) {
+				if (this.getContext().type === CometChat.ACTION_TYPE.TYPE_USER && this.getContext().item.uid === conversation.conversationWith.uid ) {
 					this.selectedConversation = conversation;
 				}
 			}

@@ -434,9 +434,10 @@ class CometChatConversationListItem extends React.PureComponent {
 
 		return (
 			<div css={listItem(this.props)} className="list__item" 
-			onMouseEnter={() => this.handleMouseHover(true)}
-			 onMouseLeave={() => this.handleMouseHover(false)} 
-			 onClick={this.itemClick}>
+				onMouseEnter={() => this.handleMouseHover(true)}
+			 	onMouseLeave={() => this.handleMouseHover(false)} 
+			 	onClick={this.itemClick}
+			>
 				<div css={this.props.conversation.conversationType == "user" ? itemThumbnailStyle() : itemChannelStyle()} 
 					className="list__item__thumbnail">
 					{this.props.conversation.conversationType == "user" ? avatar : "#"}
