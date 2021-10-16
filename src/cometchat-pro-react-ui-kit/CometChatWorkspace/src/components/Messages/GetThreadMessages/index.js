@@ -22,8 +22,9 @@ import {
 	headerWrapperStyle,
 	headerDetailStyle,
 	headerTitleStyle,
-	headerCloseStyle,
-	messageContainerStyle
+	messageContainerStyle,
+	noResult,
+	noResultImage
 } from "./style";
 
 import clearIcon from "../CometChatMessageThread/resources/close.svg";
@@ -81,11 +82,11 @@ class GetThreadMessages extends React.PureComponent {
 			});
 		}
 		else {
-			let  b = this.loggedInUser.uid;
+			let UID = this.loggedInUser.uid;
 			let limit = 30;
 			let list = [];
 			let messagesRequest = new CometChat.MessagesRequestBuilder()
-				.setUID("aaa")
+				.setUID('aaa')
 				.setLimit(limit)
 				.build();
 
@@ -106,7 +107,16 @@ class GetThreadMessages extends React.PureComponent {
 						tempTheards.push(item);
 					}
 				})
+
+				tempTheards.forEach(element => {
+					list.forEach(parent =>{
+						if(element.parentMessageId == parent.id)
+							element.parentMsg = parent.text
+					})
+				});
 			}
+
+
 
 			this.setState({threadMessages: tempTheards})
 		}
@@ -114,6 +124,8 @@ class GetThreadMessages extends React.PureComponent {
 
 	render() {
 		console.log('theard = ', this.state.threadMessages);
+		if(this.state.threadMessages.length > 0)
+			console.log('time = ', getMessageSentTime( this.state.threadMessages[0].sentAt));
 
 		return (
 			<React.Fragment>
@@ -125,11 +137,6 @@ class GetThreadMessages extends React.PureComponent {
 									{Translator.translate("THREADS", this.context.language)}
 								</h6>
 							</div>
-							{/* <div 
-								css={headerCloseStyle(clearIcon, this.context)} 
-								className="header__close" 
-								onClick={() => this.props.actionGenerated(enums.ACTIONS["CLOSE_THREADED_MESSAGE"])}>
-							</div> */}
 						</div>
 					</div>
 					<div css={messageContainerStyle()} className="chat__message__container">
@@ -143,16 +150,20 @@ class GetThreadMessages extends React.PureComponent {
 												<img 
 													css={threadAvatar()} 
 													className="threadAvatar" 
-													src={item.sender.avatar} />
+													src={item.receiver.avatar 
+														? item.receiver.avatar 
+														: "https://ca.slack-edge.com/T02J6BD2F32-U02HV9S5MTK-gfccba36b2b6-512"} />
 												<div className="threadUserDetail" >
-													<span css={detailName()}>{item.receiver.name}</span> <br />
-													<span>{item.text}</span>
+													<span css={detailName()}>{item.receiver.name}</span><span>{getMessageSentTime(item.sentAt)}</span> <br />
+													<span>{item.parentMsg}</span>
 												</div>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					
 											</div>
 											<div className="sender" css={threadSender()}>
-												<img css={threadAvatar()} src={item.sender.avatar} />
+												<img 
+													css={threadAvatar()} 
+													src={item.sender.avatar ? item.sender.avatar : "https://ca.slack-edge.com/T02J6BD2F32-U02HV9S5MTK-gfccba36b2b6-512" }/>
 												<div className="threadUserDetail" >
-													<span css={detailName()}>{item.sender.name}</span> <br />
+													<span css={detailName()}>{item.sender.name}</span><span>{getMessageSentTime(item.sentAt)}</span> <br />
 													<span>{item.text}</span>
 												</div>
 											</div>
@@ -160,7 +171,11 @@ class GetThreadMessages extends React.PureComponent {
 									</div>
 								)
 							})
-						: <div> There is no result </div>
+						: 	<div css={noResult()} >
+								<img css={noResultImage()} src="https://a.slack-edge.com/production-standard-emoji-assets/13.0/google-large/1f331.png" />
+								Tend to your threads <br />
+								Threads you’re involved in will be collected right here.					 
+							</div>
 					}
 
 					</div>

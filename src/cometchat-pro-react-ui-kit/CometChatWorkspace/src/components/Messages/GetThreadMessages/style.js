@@ -191,7 +191,7 @@ export const extHeader = context => {
 export const threadContainer = context => {
 
 	return {
-		margin: "20px",
+		margin: "10px 20px",
 		padding: "10px",
 		border: "1px solid #afabab",
 		borderRadius: "20px"
@@ -212,9 +212,10 @@ export const threadAvatar = context => {
 
 	return {
 		float: "left",
-		width: "70px",
-		height: "70px",
-		borderRadius: "1px"
+		width: "50px",
+		height: "50px",
+		borderRadius: "15px",
+		padding: "6px"
 	};
 };
 
@@ -235,17 +236,16 @@ export const threadUserDetail = context => {
 export const threadSender = context => {
 
 	return {
-		minHeight: "70px",
-		lineHeight: "2",
-		// backgroundColor: "#efdddd"
+		minHeight: "50px",
+		lineHeight: "1.7",
 	};
 };
 
 export const threadReceiver = context => {
 
 	return {
-		minHeight: "70px",
-		lineHeight: "2"
+		minHeight: "50px",
+		lineHeight: "1.7"
 	};
 };
 
@@ -253,5 +253,26 @@ export const detailName = context => {
 
 	return {
 		fontWeight: "700",
+		marginRight: "10px"
+	};
+};
+
+export const noResult = context => {
+
+	return {
+		fontSize: "20px",
+    	margin: "0 auto",
+    	position: "absolute",
+    	top: "50%",
+    	left: "40%",
+		textAlign: "center",
+		width: "40%"
+	};
+};
+
+export const noResultImage = context => {
+
+	return {
+    	margin: "0 auto"
 	};
 };

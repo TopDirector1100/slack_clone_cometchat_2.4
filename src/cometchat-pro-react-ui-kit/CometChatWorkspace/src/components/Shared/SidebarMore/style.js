@@ -9,7 +9,8 @@ export const notificationContainerStyle = (props, keyframes) => {
         maxWidth: "320px",
         top: "40px",
         left: "70%",
-        transform: "translate(-50%, 0)"
+        transform: "translate(-50%, 0)",
+        zIndex: "999"
     }
 }
 

@@ -23,11 +23,10 @@ import {
 	headerDetailStyle,
 	headerTitleStyle,
 	headerCloseStyle,
-	messageContainerStyle
+	messageContainerStyle,
+	noResult,
+	noResultImage
 } from "./style";
-
-import clearIcon from "../CometChatMessageThread/resources/close.svg";
-import * as enums from "../../../util/enums.js";
 
 class GetAllDMs extends React.PureComponent {
 	static contextType = CometChatContext;
@@ -120,7 +119,7 @@ class GetAllDMs extends React.PureComponent {
 						<div css={headerWrapperStyle()} className="header__wrapper">
 							<div css={headerDetailStyle()} className="header__details">
 								<h6 css={headerTitleStyle()} className="header__title">
-									{Translator.translate("Direct Messages", this.context.language)}
+									{Translator.translate("All direct Messages", this.context.language)}
 								</h6>
 							</div>
 						</div>
@@ -146,7 +145,12 @@ class GetAllDMs extends React.PureComponent {
 									</div>
 								)
 							})
-						: <div> There is no result </div>
+						: 
+						<div css={noResult()} >
+							<img css={noResultImage()} src="https://a.slack-edge.com/production-standard-emoji-assets/13.0/google-large/1f331.png" />
+							See new activity in real time <br />
+							When people react to your messages or mention you or your keywords, you’ll see it here.					 
+						</div>
 					}
 
 					</div>

@@ -1,3 +1,4 @@
+// import Picker from '@progresso/react-giphy-picker-https'
 import Picker from 'react-giphy-picker'
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'

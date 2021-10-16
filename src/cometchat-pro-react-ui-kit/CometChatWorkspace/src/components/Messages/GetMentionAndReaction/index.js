@@ -23,13 +23,12 @@ import {
 	headerDetailStyle,
 	headerTitleStyle,
 	headerCloseStyle,
-	messageContainerStyle
+	messageContainerStyle,
+	noResult,
+	noResultImage
 } from "./style";
 
-import clearIcon from "../CometChatMessageThread/resources/close.svg";
-import * as enums from "../../../util/enums.js";
-
-class GetAllDMs extends React.PureComponent {
+class GetMentionAndReaction extends React.PureComponent {
 	static contextType = CometChatContext;
 	loggedInUser;
 
@@ -38,7 +37,7 @@ class GetAllDMs extends React.PureComponent {
 		this.state = {
 			receipts: false,
 			messageList: [],
-			directMessages: []
+			mentionAndReactions: []
 		};
 	}
 
@@ -106,12 +105,12 @@ class GetAllDMs extends React.PureComponent {
 				})
 			}
 
-			this.setState({directMessages: tempTheards})
+			this.setState({mentionAndReactions: tempTheards})
 		}
 	}
 
 	render() {
-		console.log('dms = ', this.state.directMessages);
+		console.log('dms = ', this.state.mentionAndReactions);
 
 		return (
 			<React.Fragment>
@@ -120,33 +119,36 @@ class GetAllDMs extends React.PureComponent {
 						<div css={headerWrapperStyle()} className="header__wrapper">
 							<div css={headerDetailStyle()} className="header__details">
 								<h6 css={headerTitleStyle()} className="header__title">
-									{Translator.translate("Direct Messages", this.context.language)}
+									{Translator.translate("Mentions & reactions", this.context.language)}
 								</h6>
 							</div>
 						</div>
 					</div>
 					<div css={messageContainerStyle()} className="chat__message__container">
 					{
-						this.state.directMessages.length > 0 ?
-							this.state.directMessages.map((item, index) =>{
+						this.state.mentionAndReactions.length > 0 ?
+							this.state.mentionAndReactions.map((item, index) =>{
 								return(
 									<div css={threadContainer(this.props, this.state)} key={index}>
 										<div className="threadBox">
-											<div className="reciever" css={threadReceiver()} >
+											<div className="sender" css={threadSender()}>
 												<img 
 													css={threadAvatar()} 
-													className="threadAvatar" 
-													src={item.sender.avatar} />
+													src={item.sender.avatar ? item.sender.avatar : "https://ca.slack-edge.com/T02J6BD2F32-U02HV9S5MTK-gfccba36b2b6-512" }/>
 												<div className="threadUserDetail" >
-													<span css={detailName()}>{item.receiver.name}</span> <br />
+													<span css={detailName()}>{item.sender.name}</span><span>{getMessageSentTime(item.sentAt)}</span> <br />
 													<span>{item.text}</span>
-												</div>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					
+												</div>
 											</div>
 										</div>
 									</div>
 								)
 							})
-						: <div> There is no result </div>
+						: <div css={noResult()} >
+								<img css={noResultImage()} src="https://a.slack-edge.com/production-standard-emoji-assets/13.0/google-large/1f331.png" />
+								See new activity in real time <br />
+								When people react to your messages or mention you or your keywords, you’ll see it here.					 
+						</div>
 					}
 
 					</div>
@@ -158,12 +160,12 @@ class GetAllDMs extends React.PureComponent {
 }
 
 // Specifies the default values for props:
-GetAllDMs.defaultProps = {
+GetMentionAndReaction.defaultProps = {
 	theme: theme,
 };
 
-GetAllDMs.propTypes = {
+GetMentionAndReaction.propTypes = {
 	theme: PropTypes.object,
 };
 
-export { GetAllDMs };
+export { GetMentionAndReaction };

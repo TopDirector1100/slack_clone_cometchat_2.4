@@ -10,7 +10,8 @@ import {
 	CometChatMessages, 
 	GetThreadMessages,
 	GetAllDMs,
-	GetAllUnreads
+	GetAllUnreads,
+	GetMentionAndReaction
 	} from "../Messages";
 import { CometChatIncomingCall, CometChatIncomingDirectCall } from "../Calls";
 
@@ -176,7 +177,11 @@ class CometChatUI extends React.Component {
 					_parent="unified"
 				/>;
 			case 'reactions':
-				return 'bar';
+				return <GetMentionAndReaction 
+					theme={this.props.theme}
+					lang={this.props.lang}
+					_parent="unified"
+				/>;
 			case 'Dms':
 				return 	<GetAllDMs 
 					theme={this.props.theme}
@@ -200,12 +205,17 @@ class CometChatUI extends React.Component {
 					actionGenerated={this.actionHandler} 
 				/>;
 		  default:
-			return 'foo';
+			return <CometChatMessages 
+				theme={this.props.theme}
+				lang={this.props.lang}
+				_parent="unified"
+				actionGenerated={this.actionHandler} 
+			/>;
 		}
 	}
 
 	render() {
-		
+		console.log('chatwithuser = ', this.props);
 		return (
 			<React.Fragment>
 				<CometChatContextProvider ref={el => this.contextProviderRef = el}

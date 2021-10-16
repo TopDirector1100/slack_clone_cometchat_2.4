@@ -45,4 +45,5 @@ export { CometChatThreadedMessageReplyCount } from "./CometChatThreadedMessageRe
 export { GetThreadMessages } from "./GetThreadMessages";
 export { GetAllDMs } from "./GetAllDMs";
 export { GetAllUnreads } from "./GetAllUnreads";
+export { GetMentionAndReaction } from "./GetMentionAndReaction";
 

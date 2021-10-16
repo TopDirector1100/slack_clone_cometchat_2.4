@@ -23,7 +23,9 @@ import {
 	headerDetailStyle,
 	headerTitleStyle,
 	headerCloseStyle,
-	messageContainerStyle
+	messageContainerStyle,
+	noResult,
+	noResultImage
 } from "./style";
 
 class GetAllUnreads extends React.PureComponent {
@@ -143,7 +145,12 @@ class GetAllUnreads extends React.PureComponent {
 									</div>
 								)
 							})
-						: <div> There is no result </div>
+						: 
+						<div css={noResult()} >
+							<img css={noResultImage()} src="https://a.slack-edge.com/production-standard-emoji-assets/13.0/google-xlarge/1f44f.png" />
+							Everything unread is now read. <br />
+							You’ve done it.					 
+						</div>
 					}
 
 					</div>

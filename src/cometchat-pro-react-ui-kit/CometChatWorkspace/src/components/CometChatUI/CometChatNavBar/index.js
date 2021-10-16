@@ -131,7 +131,12 @@ class CometChatNavBar extends React.Component {
 	getActiveTab = () => {
 		switch (this.state.activeTab) {
 			case "SIDEBAR_USERS":
-				return <CometChatUserList theme={this.props.theme} lang={this.context.language} _parent="unified" actionGenerated={this.props.actionGenerated} onItemClick={(item, type) => this.props.actionGenerated(enums.ACTIONS["ITEM_CLICKED"], type, item)} />;
+				return <CometChatUserList 
+					theme={this.props.theme} 
+					lang={this.context.language} 
+					_parent="unified" 
+					actionGenerated={this.props.actionGenerated} 
+					onItemClick={(item, type) => this.props.actionGenerated(enums.ACTIONS["ITEM_CLICKED"], type, item)} />;
 			case "SIDEBAR_CALLS":
 				return null;
 			case "SIDEBAR_CHATS":
@@ -144,6 +149,7 @@ class CometChatNavBar extends React.Component {
 					threadMsgShow={this.props.actionThread}
 					dmsshow={this.props.actionDms}
 					unreadShow={this.props.actionUnRead}
+					menAndReaShow={this.props.actionReaction}
 					messageListShow={this.props.actionMessage}
 				/>;
 			case "SIDEBAR_GROUPS":

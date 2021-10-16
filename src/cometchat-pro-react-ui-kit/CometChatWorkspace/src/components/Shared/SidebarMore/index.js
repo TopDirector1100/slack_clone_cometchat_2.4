@@ -47,7 +47,7 @@ export class SidebarMore extends React.Component {
                     {/* <div css={toast__item()} onClick={this.props.showSavedItem}><TurnedInNot css={materialIcons_opt()} className="materialIcons" />Saved items</div> */}
                     <div css={toast__item()} onClick={this.props.showAllDms}><Forum css={materialIcons_opt()} className="materialIcons" />All DMs</div>
                     <div css={toast__item()} onClick={this.props.showAllUnRead}><Notes css={materialIcons_opt()} className="materialIcons" />All unread</div>
-                    <hr />
+                    {/* <hr /> */}
                     {/* <div css={toast__item()} onClick={this.props.showAllDms}><Forum css={materialIcons_opt()} className="materialIcons" />All DMs</div> */}
                 </div>
             </div>

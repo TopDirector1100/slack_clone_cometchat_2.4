@@ -74,7 +74,6 @@ class CometChatReceiverTextMessageBubble extends React.Component {
 	}
 
 	getMessageText = () => {
-		console.log('++++++++++++++++++++++++');
 		let messageText = this.props.message.text;
 
 		//xss extensions data
@@ -266,7 +265,6 @@ class CometChatReceiverTextMessageBubble extends React.Component {
 			toolTipView = <CometChatMessageActions message={this.props.message} actionGenerated={this.actionHandler} />;
 		}
 
-		console.log(avatar, "avatar");
 		return (
 			<div css={messageContainerStyle()} className="receiver__message__container message__text" onMouseEnter={this.handleMouseHover} onMouseLeave={this.handleMouseHover}>
 				<div css={messageWrapperStyle()} className="message__wrapper">

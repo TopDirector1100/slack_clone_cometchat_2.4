@@ -151,7 +151,7 @@ class CometChatUserList extends React.PureComponent {
 
 		if(!this.props.onItemClick)
 			return;
-
+		console.log('coming soon');
 		this.props.onItemClick(user, CometChat.ACTION_TYPE.TYPE_USER);
 	}
 
@@ -237,7 +237,8 @@ class CometChatUserList extends React.PureComponent {
 			return (
 				<React.Fragment key={user.uid}>
 					{firstChar}
-					<CometChatUserListItem user={user} selectedUser={selectedUser} clickHandler={this.handleClick} />
+					<CometChatUserListItem user={user} selectedUser={selectedUser} 
+						clickHandler={this.handleClick} />
 				</React.Fragment>
 			);
 

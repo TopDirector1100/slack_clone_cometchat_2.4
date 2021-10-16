@@ -978,7 +978,10 @@ class CometChatConversationList extends React.Component {
 				{/* Mention & Reactions */}
 				{
 					this.state.showReaction ? 
-						<div css={chatsHeaderStyle(theme)} className="chats__header" onClick={this.getReactionMessage}>
+						<div css={chatsHeaderStyle(theme)} 
+							className="chats__header" 
+							onClick={this.props.menAndReaShow}
+						>
 							<AlternateEmail css={materialIcons_opt()} className="materialIcons" />Mentions & reactions
 						</div> 
 					: ''
