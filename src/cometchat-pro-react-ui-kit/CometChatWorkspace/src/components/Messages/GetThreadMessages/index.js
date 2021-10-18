@@ -11,6 +11,8 @@ import { CometChatContext } from "../../../util/CometChatContext"
 import Translator from "../../../resources/localization/translator";
 import { theme } from "../../../resources/theme";
 
+import {CometChatContextProvider} from "../../../util/CometChatContext";
+
 import { 
 	threadAvatar,
 	threadContainer,
@@ -24,11 +26,14 @@ import {
 	headerTitleStyle,
 	messageContainerStyle,
 	noResult,
-	noResultImage
+	noResultImage,
+	chatSideBarBtnStyle,
+	chatContainerStyle,
+	chatWrapperStyle
 } from "./style";
 
-import clearIcon from "../CometChatMessageThread/resources/close.svg";
 import * as enums from "../../../util/enums.js";
+import menuIcon from "../CometChatMessageHeader/resources/menu.svg";
 
 class GetThreadMessages extends React.PureComponent {
 	static contextType = CometChatContext;
@@ -44,8 +49,7 @@ class GetThreadMessages extends React.PureComponent {
 	}
 
 	componentDidMount() {
-		console.log('get thread props = ', this.props);
-
+		this.mobileShow = false;
 		CometChat.getLoggedinUser()
 		.then(user => {	
 				this.loggedInUser = user;
@@ -57,6 +61,11 @@ class GetThreadMessages extends React.PureComponent {
 
 	componentDidUpdate() {
 	}
+
+	resetChat = () => {
+		this.context.setItem({});
+		this.props.actionGenerated(enums.ACTIONS["TOGGLE_SIDEBAR"]);
+	};
 
 	toggleReadReceipts = () => {
 		/**
@@ -116,22 +125,48 @@ class GetThreadMessages extends React.PureComponent {
 				});
 			}
 
-
-
 			this.setState({threadMessages: tempTheards})
 		}
 	}
 
-	render() {
-		console.log('theard = ', this.state.threadMessages);
-		if(this.state.threadMessages.length > 0)
-			console.log('time = ', getMessageSentTime( this.state.threadMessages[0].sentAt));
+	getContext = () => {
+		if (this.props._parent.length) {
+			return this.context;
+		} else {
+			return this.contextProviderRef.state;
+		}
+	};
 
-		return (
+	render() {
+		console.log('theard = ',this.getContext().item);
+
+
+		/**
+		 * If used as standalone component
+		*/
+		if (this.props._parent.trim().length === 0 
+			&& this.props.chatWithUser.trim().length === 0 
+			&& this.props.chatWithGroup.trim().length === 0) {
+			return (
+				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} _component={enums.CONSTANTS["MESSAGES_COMPONENT"]} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
+					<div></div>
+				</CometChatContextProvider>
+			);
+		} else if (this.props._parent.trim().length && Object.keys(this.getContext().item).length === 0) {
+			return null;
+		}
+
+		let threadComponent = (
 			<React.Fragment>
 				<div css={wrapperStyle(this.context)} className="thread__chat">
 					<div css={headerStyle(this.context)} className="chat__header">
+
 						<div css={headerWrapperStyle()} className="header__wrapper">
+							<div 
+								css={chatSideBarBtnStyle(menuIcon, this.props, this.context)} 
+								className="chat__sidebar-menu" 
+								onClick={this.resetChat}>
+							</div>
 							<div css={headerDetailStyle()} className="header__details">
 								<h6 css={headerTitleStyle()} className="header__title">
 									{Translator.translate("THREADS", this.context.language)}
@@ -181,8 +216,25 @@ class GetThreadMessages extends React.PureComponent {
 					</div>
 				</div>
 			</React.Fragment>
-					
 		);
+
+		let messageWrapper = threadComponent;
+		/*
+		If used as a standalone component
+		**/
+		if (this.props._parent.trim().length === 0) {
+			messageWrapper = (
+				<CometChatContextProvider 
+					ref={el => (this.contextProviderRef = el)} 
+					user={this.props.chatWithUser} 
+					group={this.props.chatWithGroup}
+				>
+					<div css={chatContainerStyle()}>{threadComponent}</div>
+				</CometChatContextProvider>
+			);
+		}
+
+		return messageWrapper;
 	}
 }
 

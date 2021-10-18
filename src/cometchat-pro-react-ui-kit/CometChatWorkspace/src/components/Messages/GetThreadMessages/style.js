@@ -48,6 +48,27 @@ export const headerDetailStyle = () => {
     }
 }
 
+export const chatSideBarBtnStyle = (img, props, context) => {
+
+    const displayValue = (props.hasOwnProperty("sidebar") && props.sidebar === 0) ? { display: "none!important"} : {};
+
+    const mq = [...context.theme.breakPoints];
+
+    return {
+        cursor: "pointer",
+        display: "none",
+        mask: `url(${img}) center center no-repeat`,
+        backgroundColor: `${context.theme.primaryColor}`,
+        width: "24px",
+        height: "24px",
+        float: "left",
+        [`@media ${mq[1]}, ${mq[2]}`]: {
+			display: "block"
+		},
+        ...displayValue
+    }
+}
+
 export const headerTitleStyle = () => {
 
     return {
@@ -276,3 +297,12 @@ export const noResultImage = context => {
     	margin: "0 auto"
 	};
 };
+
+export const chatContainerStyle = () => {
+
+    return {
+        display: "flex", 
+        width: "100%", 
+        height: "100%"
+    }
+}

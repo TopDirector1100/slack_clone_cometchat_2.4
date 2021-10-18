@@ -927,7 +927,7 @@ class CometChatConversationList extends React.Component {
 			);
 		}
 
-		let closeBtn = <div css={chatsHeaderCloseStyle(navigateIcon, theme)} className="header__close" onClick={this.handleMenuClose}>TTTTTT</div>;
+		let closeBtn = <div css={chatsHeaderCloseStyle(navigateIcon, theme)} className="header__close" onClick={this.handleMenuClose}></div>;
 		// if (this.getContext() && Object.keys(this.getContext().item).length === 0) {
 		// 	closeBtn = null;
 		// }

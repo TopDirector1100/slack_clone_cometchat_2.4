@@ -47,7 +47,7 @@ const CometChatUserListItem = (props) => {
 				<div css={itemNameStyle()} className="item__details__name"  
 				onMouseEnter={event => toggleTooltip(event, true)} 
 				onMouseLeave={event => toggleTooltip(event, false)}>{props.user.name}</div>
-				<div css={itemDescStyle(context)} className="item__details__desc"></div>
+				{/* <div css={itemDescStyle(context)} className="item__details__desc"></div> */}
 			</div>
 		</div>
 	)

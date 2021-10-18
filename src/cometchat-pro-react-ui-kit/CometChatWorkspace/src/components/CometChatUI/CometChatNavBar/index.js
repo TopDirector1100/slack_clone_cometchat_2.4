@@ -136,7 +136,12 @@ class CometChatNavBar extends React.Component {
 					lang={this.context.language} 
 					_parent="unified" 
 					actionGenerated={this.props.actionGenerated} 
-					onItemClick={(item, type) => this.props.actionGenerated(enums.ACTIONS["ITEM_CLICKED"], type, item)} />;
+					onItemClick={(item, type) => this.props.actionGenerated(enums.ACTIONS["ITEM_CLICKED"], type, item)} 
+					threadMsgShow={this.props.actionThread}
+					dmsshow={this.props.actionDms}
+					unreadShow={this.props.actionUnRead}
+					menAndReaShow={this.props.actionReaction}
+					/>;
 			case "SIDEBAR_CALLS":
 				return null;
 			case "SIDEBAR_CHATS":

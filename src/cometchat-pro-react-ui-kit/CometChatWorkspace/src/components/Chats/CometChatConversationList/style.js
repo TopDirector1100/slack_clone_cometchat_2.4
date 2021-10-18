@@ -86,12 +86,16 @@ export const chatsHeaderCloseStyle = (img, theme) => {
 		cursor: "pointer",
 		display: "none",
 		mask: `url(${img}) no-repeat left center`,
-		backgroundColor: `${theme.primaryColor}`,
+		backgroundColor: "#fbfcfd",
 		height: "24px",
 		width: "33%",
 		[`@media ${mq[0]}`]: {
 			display: "block!important",
 		},
+        marginLeft: "8px",
+        marginTop: "5px",
+        fontWeight: "900",
+        fontSize: "20px"
 	};
 };
 

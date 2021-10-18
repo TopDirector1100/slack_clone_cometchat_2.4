@@ -30,6 +30,8 @@ class CometChatUI extends React.Component {
 
 	loggedInUser = null;
 
+	moreOptionUser = null;
+
 	constructor(props) {
 		
 		super(props);
@@ -49,6 +51,13 @@ class CometChatUI extends React.Component {
 	
 	componentDidMount() {
 
+		CometChat.getLoggedinUser()
+		.then(user => {	
+				this.moreOptionUser = user;
+			})
+		.catch(error => 
+			console.log("Get Thread Messages Doesn't get user", error));
+
 		if (this.props.chatWithUser.length === 0 && this.props.chatWithGroup.length === 0) {
 			this.toggleSideBar();
 		}
@@ -58,7 +67,6 @@ class CometChatUI extends React.Component {
 		
 		switch(action) {
 			case enums.ACTIONS["ITEM_CLICKED"]:
-				console.log("user type = ", item, type);
 				this.itemClicked(item, type);
 			break;
 			case enums.ACTIONS["TOGGLE_SIDEBAR"]:
@@ -70,7 +78,6 @@ class CometChatUI extends React.Component {
 	}
 	
 	itemClicked = (item, type) => {
-		
 		this.contextProviderRef.setTypeAndItem(type, item);    
 		this.toggleSideBar()
 	}
@@ -99,24 +106,30 @@ class CometChatUI extends React.Component {
 			showSavedItems: false,
 			showThreads: false
 		})
+
+		this.toggleSideBar()
 	}
 
 	threadView = () => {
+		this.contextProviderRef.setTypeAndItem("user", this.moreOptionUser);  
 		this.setDefault();
 		this.setState({showThreads: true, currentPageName:"threads"})
 	}
 
 	reactoinView = () => {
+		this.contextProviderRef.setTypeAndItem("user", this.moreOptionUser); 
 		this.setDefault();
 		this.setState({showReactions: true, currentPageName:"reactions"})
 	}
 
 	dmsView = () => {
+		this.contextProviderRef.setTypeAndItem("user", this.moreOptionUser); 
 		this.setDefault();
 		this.setState({showAllDms: true, currentPageName:"Dms"})
 	}
 
 	unreadView = () => {
+		this.contextProviderRef.setTypeAndItem("user", this.moreOptionUser); 
 		this.setDefault();
 		this.setState({showUnReads: true, currentPageName:"unread"})
 	}
@@ -127,9 +140,20 @@ class CometChatUI extends React.Component {
 	}
 
 	toggleSideBar = () => {
-
 		const sidebarview = this.state.sidebarview;
-		this.setState({ sidebarview: !sidebarview });
+		const showThreads = this.state.showThreads;
+		const showReactions = this.state.showReactions;
+		const showAllDms = this.state.showAllDms;
+		const showUnReads = this.state.showUnReads;
+		const showChatView = this.state.showChatView;
+		this.setState({ 
+			sidebarview: !sidebarview,
+			showThreads: !showThreads,
+			showReactions: !showReactions,
+			showAllDms: !showAllDms,
+			showUnReads: !showUnReads,
+			showChatView: !showChatView,
+		});
 	}
 
 	/**
@@ -168,25 +192,27 @@ class CometChatUI extends React.Component {
 	}
 
 	renderSwitch() {
-		console.log(this.state.currentPageName)
 		switch(this.state.currentPageName) {
 		  	case 'threads':
 				return  <GetThreadMessages 
 					theme={this.props.theme}
 					lang={this.props.lang}
 					_parent="unified"
+					actionGenerated={this.actionHandler}
 				/>;
 			case 'reactions':
 				return <GetMentionAndReaction 
 					theme={this.props.theme}
 					lang={this.props.lang}
 					_parent="unified"
+					actionGenerated={this.actionHandler}
 				/>;
 			case 'Dms':
 				return 	<GetAllDMs 
 					theme={this.props.theme}
 					lang={this.props.lang}
 					_parent="unified"
+					actionGenerated={this.actionHandler}
 				/>;
 			case 'unread':
 				return <GetAllUnreads 
@@ -215,7 +241,6 @@ class CometChatUI extends React.Component {
 	}
 
 	render() {
-		console.log('chatwithuser = ', this.props);
 		return (
 			<React.Fragment>
 				<CometChatContextProvider ref={el => this.contextProviderRef = el}
@@ -225,7 +250,9 @@ class CometChatUI extends React.Component {
 					userId={this.props.userId}
 				>
 					<div css={unifiedStyle(this.props)} className="cometchat cometchat--unified" dir={Translator.getDirection(this.props.lang)}>
-						<div css={unifiedSidebarStyle(this.state, this.props)} className="unified__sidebar">
+						<div css={unifiedSidebarStyle(this.state, this.props)} 
+							className="unified__sidebar"
+						>
 							<CometChatNavBar
 								ref={el => this.navBarRef = el}
 								theme={this.props.theme}
@@ -238,9 +265,9 @@ class CometChatUI extends React.Component {
 							/>
 						</div>
 						<div css={unifiedMainStyle(this.state, this.props)} className="unified__main">
-							{
-								this.renderSwitch()
-							}
+						{
+							this.renderSwitch()
+						}
 						</div>
 						<CometChatIncomingCall theme={this.props.theme} lang={this.props.lang} actionGenerated={this.actionHandler} />
 						<CometChatIncomingDirectCall theme={this.props.theme} lang={this.props.lang} actionGenerated={this.actionHandler} />

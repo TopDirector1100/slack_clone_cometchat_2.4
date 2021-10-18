@@ -939,12 +939,15 @@ class CometChatMessages extends React.PureComponent {
 		 * If used as standalone component
 		 */
 		if (this.props._parent.trim().length === 0 && this.props.chatWithUser.trim().length === 0 && this.props.chatWithGroup.trim().length === 0) {
+			console.log('no here come');
 			return (
 				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} _component={enums.CONSTANTS["MESSAGES_COMPONENT"]} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
 					<div></div>
 				</CometChatContextProvider>
 			);
-		} else if (this.props._parent.trim().length && Object.keys(this.getContext().item).length === 0) {
+		} else if (this.props._parent.trim().length 
+		&& Object.keys(this.getContext().item).length === 0) {
+			console.log('here come');
 			return null;
 		}
 
@@ -1053,26 +1056,6 @@ class CometChatMessages extends React.PureComponent {
 			originalImageView = <CometChatImageViewer close={() => this.toggleOriginalImageView(false)} message={this.state.viewOriginalImage} />;
 		}
 
-		// more actions -- threads
-		console.log('this.props = ', this.props);
-		let threadsView = null;
-		if (this.showThreadView) {
-			threadsView = (
-				<div css={chatSecondaryStyle(this.props)} className="chat__secondary-view">
-					<GetThreadMessages 
-						activeTab={this.state.activeTab} 
-						threadItem={this.state.threadmessageitem} 
-						threadType={this.state.threadmessagetype} 
-						parentMessage={this.state.threadmessageparent} 
-						loggedInUser={this.loggedInUser} 
-						actionGenerated={this.actionHandler} 
-						messages={this.state.messageList}
-					/>
-				</div>
-			);
-		}
-
-
 		let messageComponent = (
 			<React.Fragment>
 				<div css={chatWrapperStyle(this.props, this.state)} className="main__chat" dir={Translator.getDirection(this.props.lang)}>
@@ -1098,7 +1081,6 @@ class CometChatMessages extends React.PureComponent {
 				{outgoingCallView}
 				{incomingDirectCallView}
 				{outgoingDirectCallView}
-				{threadsView}
 			</React.Fragment>
 		);
 
@@ -1106,9 +1088,15 @@ class CometChatMessages extends React.PureComponent {
 		/*
 		If used as a standalone component
 		**/
+		console.log('meesge parent what  = ', this.props._parent);
 		if (this.props._parent.trim().length === 0) {
+
 			messageWrapper = (
-				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
+				<CometChatContextProvider 
+					ref={el => (this.contextProviderRef = el)} 
+					user={this.props.chatWithUser} 
+					group={this.props.chatWithGroup}
+				>
 					<div css={chatContainerStyle()}>{messageComponent}</div>
 				</CometChatContextProvider>
 			);
