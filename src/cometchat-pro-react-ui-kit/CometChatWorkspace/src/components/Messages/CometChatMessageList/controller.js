@@ -41,9 +41,23 @@ export class MessageListManager {
                 .then(hideDeletedMessages => {
                     if (this.type === CometChat.ACTION_TYPE.TYPE_USER) {
                         if (this.parentMessageId) {
-                            this.messageRequest = new CometChat.MessagesRequestBuilder().setUID(this.item.uid).setParentMessageId(this.parentMessageId).setCategories(categories).setTypes(types).hideDeletedMessages(hideDeletedMessages).setLimit(this.limit).build();
+                            this.messageRequest = new CometChat.MessagesRequestBuilder()
+                            .setUID(this.item.uid)
+                            .setParentMessageId(this.parentMessageId)
+                            .setCategories(categories)
+                            .setTypes(types)
+                            .hideDeletedMessages(hideDeletedMessages)
+                            .setLimit(this.limit).build();
                         } else {
-                            this.messageRequest = new CometChat.MessagesRequestBuilder().setUID(this.item.uid).setCategories(categories).setTypes(types).hideReplies(true).hideDeletedMessages(hideDeletedMessages).setLimit(this.limit).build();
+                            
+                            this.messageRequest = new CometChat.MessagesRequestBuilder()
+                            .setUID(this.item.uid)
+                            .setCategories(categories)
+                            .setTypes(types)
+                            .hideReplies(true)
+                            .hideDeletedMessages(hideDeletedMessages)
+                            .setLimit(this.limit)
+                            .build();
                         }
                         resolve(this.messageRequest);
                     } else if (this.type === CometChat.ACTION_TYPE.TYPE_GROUP) {

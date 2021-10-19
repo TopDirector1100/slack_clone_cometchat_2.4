@@ -939,7 +939,6 @@ class CometChatMessages extends React.PureComponent {
 		 * If used as standalone component
 		 */
 		if (this.props._parent.trim().length === 0 && this.props.chatWithUser.trim().length === 0 && this.props.chatWithGroup.trim().length === 0) {
-			console.log('no here come');
 			return (
 				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} _component={enums.CONSTANTS["MESSAGES_COMPONENT"]} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
 					<div></div>
@@ -947,7 +946,6 @@ class CometChatMessages extends React.PureComponent {
 			);
 		} else if (this.props._parent.trim().length 
 		&& Object.keys(this.getContext().item).length === 0) {
-			console.log('here come');
 			return null;
 		}
 
@@ -1088,7 +1086,6 @@ class CometChatMessages extends React.PureComponent {
 		/*
 		If used as a standalone component
 		**/
-		console.log('meesge parent what  = ', this.props._parent);
 		if (this.props._parent.trim().length === 0) {
 
 			messageWrapper = (

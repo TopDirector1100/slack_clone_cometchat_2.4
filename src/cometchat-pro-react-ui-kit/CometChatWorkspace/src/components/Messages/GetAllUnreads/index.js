@@ -25,8 +25,14 @@ import {
 	headerCloseStyle,
 	messageContainerStyle,
 	noResult,
-	noResultImage
+	noResultImage,
+	chatSideBarBtnStyle,
+	chatContainerStyle
 } from "./style";
+
+import * as enums from "../../../util/enums.js";
+import menuIcon from "../CometChatMessageHeader/resources/menu.svg";
+import {CometChatContextProvider} from "../../../util/CometChatContext";
 
 class GetAllUnreads extends React.PureComponent {
 	static contextType = CometChatContext;
@@ -109,15 +115,47 @@ class GetAllUnreads extends React.PureComponent {
 		}
 	}
 
+	getContext = () => {
+		if (this.props._parent.length) {
+			return this.context;
+		} else {
+			return this.contextProviderRef.state;
+		}
+	};
+
+	resetChat = () => {
+		this.context.setItem({});
+		this.props.actionGenerated(enums.ACTIONS["TOGGLE_SIDEBAR"]);
+	};
+
 	render() {
 		console.log('all unreads = ', this.state.unreadMessages);
+		/**
+		 * If used as standalone component
+		*/
+		if (this.props._parent.trim().length === 0 
+			&& this.props.chatWithUser.trim().length === 0 
+			&& this.props.chatWithGroup.trim().length === 0) {
+			return (
+				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} _component={enums.CONSTANTS["MESSAGES_COMPONENT"]} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
+					<div></div>
+				</CometChatContextProvider>
+			);
+		} else if (this.props._parent.trim().length && Object.keys(this.getContext().item).length === 0) {
+			return null;
+		}
 
-		return (
+		let unreadsCmpt = (
 			<React.Fragment>
 				<div css={wrapperStyle(this.context)} className="thread__chat">
 					<div css={headerStyle(this.context)} className="chat__header">
 						<div css={headerWrapperStyle()} className="header__wrapper">
 							<div css={headerDetailStyle()} className="header__details">
+								<div 
+									css={chatSideBarBtnStyle(menuIcon, this.props, this.context)} 
+									className="chat__sidebar-menu" 
+									onClick={this.resetChat}>
+								</div>
 								<h6 css={headerTitleStyle()} className="header__title">
 									{Translator.translate("All unreads", this.context.language)}
 								</h6>
@@ -156,8 +194,26 @@ class GetAllUnreads extends React.PureComponent {
 					</div>
 				</div>
 			</React.Fragment>
-					
 		);
+		
+		let messageWrapper = unreadsCmpt;
+		/*
+		If used as a standalone component
+		**/
+		if (this.props._parent.trim().length === 0) {
+			messageWrapper = (
+				<CometChatContextProvider 
+					ref={el => (this.contextProviderRef = el)} 
+					user={this.props.chatWithUser} 
+					group={this.props.chatWithGroup}
+				>
+					<div css={chatContainerStyle()}>{unreadsCmpt}</div>
+				</CometChatContextProvider>
+			);
+		}
+
+		return messageWrapper;
+
 	}
 }
 

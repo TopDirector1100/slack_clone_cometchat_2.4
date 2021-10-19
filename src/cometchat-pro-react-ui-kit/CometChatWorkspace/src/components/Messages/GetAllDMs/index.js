@@ -25,8 +25,15 @@ import {
 	headerCloseStyle,
 	messageContainerStyle,
 	noResult,
-	noResultImage
+	noResultImage,
+	chatSideBarBtnStyle,
+	chatContainerStyle,
+	detailImage
 } from "./style";
+
+import * as enums from "../../../util/enums.js";
+import menuIcon from "../CometChatMessageHeader/resources/menu.svg";
+import {CometChatContextProvider} from "../../../util/CometChatContext";
 
 class GetAllDMs extends React.PureComponent {
 	static contextType = CometChatContext;
@@ -48,7 +55,7 @@ class GetAllDMs extends React.PureComponent {
 				this.getThreads();
 			})
 		.catch(error => 
-			this.errorHandler("Get Thread Messages Doesn't get user", error));
+			this.errorHandler("Get Directed Messages Doesn't get user", error));
 	}
 
 	componentDidUpdate() {
@@ -78,46 +85,77 @@ class GetAllDMs extends React.PureComponent {
 			});
 		}
 		else {
-			let  b = this.loggedInUser.uid;
+			let  UID = this.loggedInUser.uid;
 			let limit = 30;
-			let list = [];
-			let messagesRequest = new CometChat.MessagesRequestBuilder()
-				.setUID("aaa")
+			var list = [];
+
+			let conversationsRequest = new CometChat.ConversationsRequestBuilder()
 				.setLimit(limit)
 				.build();
 
-			list = await messagesRequest.fetchPrevious().then(
-				messages => {
-					return messages;
+			list = await conversationsRequest.fetchNext().then(
+				conversationList => {
+					return conversationList;
 				}, error => {
-					console.log("Message fetching failed with error:", error);
 					return [];
 				}
 			);
 
-			let tempTheards = [];
+			let tempDMs = [];
 			if(list.length > 0) {
 				list.map((item, i) =>
 				{
-					if(item.parentMessageId) {
-						tempTheards.push(item);
+					if(item.lastMessage && item.lastMessage.sender.uid == UID) {
+						tempDMs.push(item.lastMessage)
 					}
 				})
 			}
 
-			this.setState({directMessages: tempTheards})
+			this.setState({directMessages: tempDMs})
 		}
 	}
 
+	getContext = () => {
+		if (this.props._parent.length) {
+			return this.context;
+		} else {
+			return this.contextProviderRef.state;
+		}
+	};
+
+	resetChat = () => {
+		this.context.setItem({});
+		this.props.actionGenerated(enums.ACTIONS["TOGGLE_SIDEBAR"]);
+	};
+
 	render() {
 		console.log('dms = ', this.state.directMessages);
+		/**
+		 * If used as standalone component
+		*/
+		if (this.props._parent.trim().length === 0 
+			&& this.props.chatWithUser.trim().length === 0 
+			&& this.props.chatWithGroup.trim().length === 0) {
+			return (
+				<CometChatContextProvider ref={el => (this.contextProviderRef = el)} _component={enums.CONSTANTS["MESSAGES_COMPONENT"]} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
+					<div></div>
+				</CometChatContextProvider>
+			);
+		} else if (this.props._parent.trim().length && Object.keys(this.getContext().item).length === 0) {
+			return null;
+		}
 
-		return (
+		let dmCmpt = (			
 			<React.Fragment>
 				<div css={wrapperStyle(this.context)} className="thread__chat">
 					<div css={headerStyle(this.context)} className="chat__header">
 						<div css={headerWrapperStyle()} className="header__wrapper">
 							<div css={headerDetailStyle()} className="header__details">
+								<div 
+									css={chatSideBarBtnStyle(menuIcon, this.props, this.context)} 
+									className="chat__sidebar-menu" 
+									onClick={this.resetChat}>
+								</div>
 								<h6 css={headerTitleStyle()} className="header__title">
 									{Translator.translate("All direct Messages", this.context.language)}
 								</h6>
@@ -135,10 +173,17 @@ class GetAllDMs extends React.PureComponent {
 												<img 
 													css={threadAvatar()} 
 													className="threadAvatar" 
-													src={item.sender.avatar} />
+													src={item.receiver.avatar} />
 												<div className="threadUserDetail" >
 													<span css={detailName()}>{item.receiver.name}</span> <br />
-													<span>{item.text}</span>
+													<span>You: 
+													{
+														item.type == "audio" ? 
+															"calling" 
+															: item.text.includes("https://media1.giphy.com/") ?
+															<img css={detailImage()} src={item.text} /> : item.text
+													}
+													</span>
 												</div>																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					
 											</div>
 										</div>
@@ -155,9 +200,25 @@ class GetAllDMs extends React.PureComponent {
 
 					</div>
 				</div>
-			</React.Fragment>
-					
-		);
+			</React.Fragment>);
+
+		let messageWrapper = dmCmpt;
+		/*
+		If used as a standalone component
+		**/
+		if (this.props._parent.trim().length === 0) {
+			messageWrapper = (
+				<CometChatContextProvider 
+					ref={el => (this.contextProviderRef = el)} 
+					user={this.props.chatWithUser} 
+					group={this.props.chatWithGroup}
+				>
+					<div css={chatContainerStyle()}>{dmCmpt}</div>
+				</CometChatContextProvider>
+			);
+		}
+
+		return messageWrapper;
 	}
 }
 

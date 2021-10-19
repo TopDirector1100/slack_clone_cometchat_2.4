@@ -95,8 +95,9 @@ class GetThreadMessages extends React.PureComponent {
 			let limit = 30;
 			let list = [];
 			let messagesRequest = new CometChat.MessagesRequestBuilder()
-				.setUID('aaa')
+				.setUID(UID)
 				.setLimit(limit)
+				.hideReplies(false)
 				.build();
 
 			list = await messagesRequest.fetchPrevious().then(
@@ -107,6 +108,8 @@ class GetThreadMessages extends React.PureComponent {
 					return [];
 				}
 			);
+
+			console.log('list = ', list);
 
 			let tempTheards = [];
 			if(list.length > 0) {
@@ -138,9 +141,6 @@ class GetThreadMessages extends React.PureComponent {
 	};
 
 	render() {
-		console.log('theard = ',this.getContext().item);
-
-
 		/**
 		 * If used as standalone component
 		*/
@@ -162,12 +162,13 @@ class GetThreadMessages extends React.PureComponent {
 					<div css={headerStyle(this.context)} className="chat__header">
 
 						<div css={headerWrapperStyle()} className="header__wrapper">
-							<div 
-								css={chatSideBarBtnStyle(menuIcon, this.props, this.context)} 
-								className="chat__sidebar-menu" 
-								onClick={this.resetChat}>
-							</div>
+
 							<div css={headerDetailStyle()} className="header__details">
+								<div 
+									css={chatSideBarBtnStyle(menuIcon, this.props, this.context)} 
+									className="chat__sidebar-menu" 
+									onClick={this.resetChat}>
+								</div>
 								<h6 css={headerTitleStyle()} className="header__title">
 									{Translator.translate("THREADS", this.context.language)}
 								</h6>
